@@ -2,6 +2,9 @@
 
 Repositório destinado à programação do robô (insira nome aqui quando descobrir) que está sendo desenvolvido e será utilizado na competição interna da DROID (Divisão Inteligente de Robótica).
 
+[Edital Competição Interna 2024 DROID](https://github.com/user-attachments/files/16090499/Edital_Competicao_Interna_2024___DROID__.pdf)
+
+
 ## Tecnologias Utilizadas
 
 - **Visão Computacional**: YOLOv8, Python3
