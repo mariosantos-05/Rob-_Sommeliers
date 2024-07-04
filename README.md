@@ -29,3 +29,4 @@ Repositório destinado à programação do robô (insira nome aqui quando descob
 
 # Repositório mantido e gerenciado por:
 - [Mario Santos](https://github.com/mariosantos-05)
+- [Lucca Aguilar](https://github.com/lucca-aguilar)
