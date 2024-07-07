@@ -1,11 +1,22 @@
 #include "Robot.h"
-#include <Arduino.h>
 
 
 
-Robot::Robot(MotorDC& M_Left, MotorDC& M_Right, Claw& claw, Sensor& S_Left, Sensor& S_Right, Sensor& Front,ColorSensor S_Color, LED& led)
-    : motor_left(M_Left), motor_right(M_Right), claw(claw), S_Left(S_Left), S_Right(S_Right), S_front(Front),S_Color(S_Color), Led(Led) {}
 
+Robot::Robot(MotorDC& M_Left, MotorDC& M_Right, Servo& claw, Sensor& S_Left, Sensor& S_Right, Sensor& Front,ColorSensor S_Color, LED& leds)
+    : motor_left(M_Left), motor_right(M_Right), claw(claw), S_Left(S_Left), S_Right(S_Right), S_front(Front),S_Color(S_Color), Led(leds) {}
+
+
+void Robot::Align(float tolerance){
+    float diference = abs(S_Left.getDistance() - S_Right.getDistance());
+    while (diference > tolerance){
+        if(S_Left.getDistance() > S_Right.getDistance()){
+            motor_right.Forward();
+        }
+        motor_left.Forward();
+    }
+    
+}
 
 void Robot::Turn_Left(){
     motor_left.Stop();
@@ -53,32 +64,16 @@ void Robot::Stop() {
     motor_right.Stop();
 }
 
-void Robot::Vision() {
+char Robot::Vision() {
     if (Serial.available() > 0) {
         char receivedLetter = Serial.read(); // Lê a letra recebida pelo raspberry pi
+        return receivedLetter;
 
-        // Faça algo com a letra recebida
+        // print testes
         Serial.print("Letra recebida: ");
         Serial.println(receivedLetter);
-
-        switch (receivedLetter) {
-            case 'A':
-                //stub
-                break;
-            case 'B':
-                //stub
-                break;
-            case 'C':
-                //stub
-                break;
-            case 'D':
-                //stub
-                break;
-            default:
-                //stub
-                break;
-        }
     }
+    return 'H';
 }
 
 long Robot::Get_L_Distance() {

@@ -1,10 +1,10 @@
 #include "Sensor.h"
-#include <Arduino.h>
+
 
 Sensor::Sensor(int trig, int echo) : trigPin(trig), echoPin(echo) {
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
-}
+}   
 
 long Sensor::getDistance() {
     digitalWrite(trigPin, LOW);

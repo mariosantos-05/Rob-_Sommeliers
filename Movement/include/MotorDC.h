@@ -1,5 +1,6 @@
 #ifndef MOTORDC_H
 #define MOTORDC_H
+#include <Arduino.h>
 
 class MotorDC{
 private:
@@ -11,4 +12,4 @@ public:
     void Stop();
 };
 
-#endif; 
+#endif
