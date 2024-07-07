@@ -1,5 +1,5 @@
 #include "MotorDC.h"
-#include <Arduino.h>
+
 
 MotorDC::MotorDC(int p1, int p2, int en): pin1(p1), pin2(p2), enablepin(en){
     pinMode(pin1,OUTPUT);

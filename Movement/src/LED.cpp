@@ -1,5 +1,5 @@
 #include "LED.h"
-#include <Arduino.h>
+
 
 LED::LED(int r, int g, int b) : redPin(r), greenPin(g), bluePin(b) {
     pinMode(redPin, OUTPUT);
