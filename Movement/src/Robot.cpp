@@ -1,10 +1,8 @@
 #include "Robot.h"
 
 
-
-
-Robot::Robot(MotorDC& M_Left, MotorDC& M_Right, Servo& claw, Sensor& S_Left, Sensor& S_Right, Sensor& Front,ColorSensor S_Color, LED& leds)
-    : motor_left(M_Left), motor_right(M_Right), claw(claw), S_Left(S_Left), S_Right(S_Right), S_front(Front),S_Color(S_Color), Led(leds) {}
+Robot::Robot(MotorDC& M_Left, MotorDC& M_Right, Servo& claw,Servo& Stacker, Sensor& S_Left, Sensor& S_Right, Sensor& Front,ColorSensor S_Color, LED& leds)
+    : motor_left(M_Left), motor_right(M_Right), claw(claw), stacker(Stacker), S_Left(S_Left), S_Right(S_Right), S_front(Front),S_Color(S_Color), Led(leds) {}
 
 
 void Robot::Align(float tolerance){
@@ -18,14 +16,28 @@ void Robot::Align(float tolerance){
     
 }
 
-void Robot::Turn_Left(){
+void Robot::Close_Claw(int position){
+    claw.write(position);
+}
+
+void Robot::Open_Claw(int position){
+    claw.write(position);
+}
+
+
+void Robot::Turn_Left_90(){
     motor_left.Stop();
     motor_right.Forward();
 }
 
-void Robot::Turn_right(){
+void Robot::Turn_right_90(){
     motor_left.Forward();
     motor_right.Stop();
+}
+
+void Robot::Turn_Angle(float angle){
+    motor_left.Turn(angle);
+    motor_right.Turn(angle);
 }
 
 void Robot::TurnOFFLED() {
@@ -59,9 +71,24 @@ void Robot::Straight_Back() {
     motor_right.Backward();
 }
 
+void Robot::Straight_Back_cm(float cm) {
+    float time = cm / 10.0; // definir essa velocidade na mão!
+    unsigned long timeMs = time * 1000; // converte para milissegundos
+    Straight_Back();
+    delay(timeMs); 
+}
+
 void Robot::Stop() {
     motor_left.Stop();
     motor_right.Stop();
+}
+
+void Robot::Go_Up_cm(float cm){
+    stacker.writeMicroseconds(-cm);
+}
+
+void Robot::Go_Down_cm(float cm){
+    stacker.writeMicroseconds(cm);
 }
 
 char Robot::Vision() {
@@ -70,8 +97,8 @@ char Robot::Vision() {
         return receivedLetter;
 
         // print testes
-        Serial.print("Letra recebida: ");
-        Serial.println(receivedLetter);
+        //Serial.print("Letra recebida: ");
+        //Serial.println(receivedLetter);
     }
     return 'H';
 }
