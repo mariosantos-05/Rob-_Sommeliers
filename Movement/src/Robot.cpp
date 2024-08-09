@@ -44,10 +44,11 @@ void Robot::TurnOFFLED() {
     Led.turnOff();
 }
 
-void Robot::Update_LED_CS(){
-    int red, green, blue;
-    S_Color.readColor(&red, &green, &blue);
-    SetLEDColor(red, green, blue);
+void Robot::Update_LED_CS(int r, int g, int b){
+    int value = min(r ,min(g, b));
+    if(value ==  r) SetLEDColor(255, 0, 0);
+    if(value == g) SetLEDColor(0, 255, 0);
+    else SetLEDColor(0, 0, 255);
 }
 
 void Robot::SetLEDColor(int red, int green, int blue) {
@@ -93,14 +94,11 @@ void Robot::Go_Down_cm(float cm){
 
 char Robot::Vision() {
     if (Serial.available() > 0) {
-        char receivedLetter = Serial.read(); // Lê a letra recebida pelo raspberry pi
-        return receivedLetter;
-
-        // print testes
-        //Serial.print("Letra recebida: ");
-        //Serial.println(receivedLetter);
+        String receivedLetter = Serial.readStringUntil('\n'); // Lê a letra recebida pelo raspberry pi
+        char letra = receivedLetter[0];
+        return letra;
     }
-    return 'H';
+    return 'i';
 }
 
 long Robot::Get_L_Distance() {

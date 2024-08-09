@@ -24,7 +24,7 @@ public:
     void Turn_Angle(float angle);
     void TurnOFFLED();
     void SetLEDColor(int r, int g, int b);
-    void Update_LED_CS();
+    void Update_LED_CS(int r, int g, int b);
     void Straight_Run();
     void Straight_Back();
     void Straight_Back_cm(float cm);
