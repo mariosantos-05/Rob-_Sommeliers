@@ -68,9 +68,36 @@ float tolerance_Align = 0.0;
 int openPosition = 0;   
 int closedPosition = 90;  
 int r, g, b;
+int counterA = 0;
+int counterDoors = 0;
+int counterCubes = 0;
 
 // Estrategia principal de navegação do robô (quase um pseudodigo por enquanto!)
 
+void getCube() { // funcao de pegar cubos
+    robot.Open_Claw();
+    robot.Straight_Run_cm(6);
+    robot.SetLEDColor(colorSensor.readColor()) // le a cor do cubo e liga o LED
+    robot.Close_Claw();
+    robot.Straight_Back_cm(6);
+}
+
+void deliverCube() {
+    if (counterCubes > 1 && counterCubes < 5) {
+        robot.Go_Up_cm(14);
+    } else {
+        robot.Go_Up_cm(4);
+    } 
+    robot.Straight_Run_cm(5);
+    robot.Open_Claw();
+    robot.Straight_Back_cm(5);
+    robot.Close_Claw();
+    if (counterCubes > 1 && counterCubes < 5) {
+        robot.Go_Down_cm(14);
+    } else {
+        robot.Go_Down_cm(4);
+    } 
+}
 
 
 void We_Dont_have_No_claw(){
@@ -146,7 +173,6 @@ void twofour(){
 }
 
 
-
 void We_do_have_a_claw(){
     robot.Straight_Run_cm(10);
     robot.Align(tolerance_Align);
@@ -175,7 +201,145 @@ void teste_componentes(){
 
 }
 
-void loop() {
+void loop() { // real real mesmo
+    while(1) { // procura a entrada do corredor 'C'
+        robot.Straight_Run();
+        if (robot.Get_F_Distance() < 11) {
+            robot.Turn_Left_90();
+        } 
+        if (robot.Get_R_Distance() > 40) {
+            robot.Turn_right_90();
+            robot.Vision();
+            if(robot.Vision() == 'C') {
+                break;
+            }
+            robot.Turn_Left_90()
+        }
+    }
+
+    // caminha pelo corredor c ateh a sala de entrega
+    robot.Align(tolerance_Align);
+    while(robot.Get_F_Distance() > 11) {
+        robot.Straight_Run();
+    }
+    robot.Turn_Left_90();
+    robot.Align(tolerance_Align);
+    while(robot.Get_F_Distance() > 11) {
+        robot.Straight_Run(); // para em frente ah prateleira
+    }
+
+    // comeca a pegar os cubos
+    robot.Turn_right_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    }
+    robot.Turn_right_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run(); // se posiciona em frente ao cubo 1
+    }
+    getCube();
+    robot.Turn_right_90();
+    robot.Straight_Run_cm();
+    robot.Turn_right_90();
+    while (robot.Get_F_Distance() > 5) {
+        robot.Straight_Run(); // se posiciona em frente ah prateleira
+    }
+    deliverCube(); // entrega o cubo 1 na posição direita 
+    counterCubes++;
+
+    // cubo 2
+    robot.Turn_right_90();
+    robot.Straight_Run_cm();
+    robot.Turn_right_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run(); // se posiciona em frente ao cubo 2
+    }
+    getCube();
+    robot.Turn_right_90();
+    robot.Straight_Run_cm();
+    robot.Turn_right_90();
+    while (robot.Get_F_Distance() > 5) {
+        robot.Straight_Run(); // se posiciona em frente ah prateleira
+    }
+    deliverCube(); // entrega o cubo 2 na posição d 
+    counterCubes++;
+
+
+    // cubo 3
+    robot.Turn_right_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    }
+    robot.Turn_right_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    } // posiciona em frente ao cubo 3
+    getCube();
+    robot.Turn_right_90();
+    robot.Turn_right_90();
+    robot.Straight_Run_cm();
+    robot.Turn_Left_90();
+    robot.Straight_Run_cm();
+    robot.Turn_right_90();
+    deliverCube();
+    counterCubes++;
+
+    // cubo 4
+    robot.Turn_right_90();
+    robot.Straight_Run_cm();
+    robot.Turn_right_90();
+    robot.Turn_right_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    } // posiciona em frente ao cubo 4
+    getCube();
+    robot.Turn_right_90();
+    robot.Straight_Run_cm();
+    robot.Turn_right_90();
+    while (robot.Get_F_Distance() > 5) {
+        robot.Straight_Run(); // se posiciona em frente ah prateleira
+    }
+    counterCubes++;
+
+    // cubo 5
+    robot.Turn_Left_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    }
+    robot.Turn_Left_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    } // posiciona em frente ao cubo 5
+    getCube();
+    robot.Turn_Left_90();
+    robot.Straight_Run_cm();
+    robot.Turn_Left_90();
+    while (robot.Get_F_Distance() > 5) {
+        robot.Straight_Run(); // se posiciona em frente ah prateleira
+    }
+    deliverCube();
+
+    // sai da sala
+    robot.Turn_Left_90();
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    } 
+    robot.Turn_Left_90();
+    while(robot.Get_R_Distance() < 10) {
+        robot.Straight_Run();
+    }
+    robot.Turn_Left_90();
+    robot.Straight_Run_cm(); // para entrar no corredor
+    robot.Align(tolerance_Align);
+    while(robot.Get_F_Distance() > 6) {
+        robot.Straight_Run();
+    } 
+    robot.Turn_Left_90();
+    while(robot.Get_L_Distance() < 40 && robot.Get_R_Distance() < 40) {
+        robot.Straight_Run();
+    } // chegou na zona central
+    }
+    
 
     // Procurar a porta correta:
     /*while(robot.Vision() != 'C'){
